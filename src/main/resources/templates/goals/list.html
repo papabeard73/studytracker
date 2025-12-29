@@ -1,0 +1,32 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Goals</title>
+</head>
+
+<body>
+    <h1>目標一覧</h1>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>タイトル</th>
+                <th>ステータス</th>
+                <th>ユーザーID</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="g : ${goals}">
+                <td th:text="${g.id}"></td>
+                <td th:text="${g.title}"></td>
+                <td th:text="${g.status}"></td>
+                <td th:text="${g.userId}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
