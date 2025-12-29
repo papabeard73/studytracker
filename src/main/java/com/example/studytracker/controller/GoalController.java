@@ -5,6 +5,7 @@ import com.example.studytracker.entity.Goal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class GoalController {
@@ -31,6 +32,15 @@ public class GoalController {
     public String newForm(Model model) {
         model.addAttribute("goal", new Goal());
         return "goals/form";
+    }
+
+    @PostMapping("/goals")
+    public String create(Goal goal) {
+        // 今はログインなしなので仮のユーザーIDを固定で入れる
+        goal.setUserId(1L);
+
+        goalService.createGoal(goal);
+        return "redirect:/goals";
     }
 }
 

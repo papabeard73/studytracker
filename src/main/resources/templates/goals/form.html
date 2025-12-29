@@ -8,8 +8,32 @@
 
 <body>
     <h1>目標を追加</h1>
-    <p>フォームは次のステップで作ります</p>
-    <p><a href="/goals">一覧へ戻る</a></p>
+
+    <form th:action="@{/goals}" th:object="${goal}" method="post">
+        <div>
+            <label>タイトル</label><br />
+            <input type="text" th:field="*{title}" />
+        </div>
+
+        <div>
+            <label>説明</label><br />
+            <textarea th:field="*{description}"></textarea>
+        </div>
+
+        <div>
+            <label>ステータス</label><br />
+            <select th:field="*{status}">
+                <option value="Not Started">Not Started</option>
+                <option value="Active">Active</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </div>
+
+        <div style="margin-top: 12px;">
+            <button type="submit">登録</button>
+            <a href="/goals">一覧へ戻る</a>
+        </div>
+    </form>
 </body>
 
 </html>
