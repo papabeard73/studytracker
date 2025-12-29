@@ -19,8 +19,8 @@ public class GoalService {
 
     // --- Create ---
     public Goal createGoal(Goal goal) {
-        goal.setCreatedAt(LocalDateTime.now());
-        goal.setUpdatedAt(LocalDateTime.now());
+        // goal.setCreatedAt(LocalDateTime.now());
+        // goal.setUpdatedAt(LocalDateTime.now());
         return goalRepository.save(goal);
     }
 

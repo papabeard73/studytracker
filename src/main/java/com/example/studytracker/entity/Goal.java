@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "goals") // テーブル名を明示（推奨）
+@Table(name = "goals") // テーブル名を明示
 public class Goal {
 
     @Id
@@ -37,7 +37,7 @@ public class Goal {
         this.title = title;
         this.description = description;
         this.status = status;
-        this.createdAt = LocalDateTime.now();
+        // this.createdAt = LocalDateTime.now();
     }
 
     // --- ゲッター・セッター ---
@@ -61,5 +61,12 @@ public class Goal {
     @PreUpdate
     public void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+    @PrePersist
+    public void onCreate() {
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
     }
 }
