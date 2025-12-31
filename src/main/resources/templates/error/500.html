@@ -1,0 +1,16 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <title>500 Server Error</title>
+</head>
+
+<body>
+    <h1>500 - サーバーエラー</h1>
+    <p th:text="${message}">Server error</p>
+    <p th:if="${detail}" th:text="${detail}"></p>
+    <p><a href="/goals">目標一覧へ戻る</a></p>
+</body>
+
+</html>

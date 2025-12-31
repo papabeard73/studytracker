@@ -53,8 +53,7 @@ public class GoalController {
 
     @GetMapping("/goals/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {
-        Goal goal = goalService.getGoalById(id)
-                .orElseThrow(() -> new RuntimeException("Goal not found: " + id));
+        Goal goal = goalService.getGoalOrThrow(id);
 
         model.addAttribute("goal", goal);
         model.addAttribute("isEdit", true); // フォームで分岐に使う

@@ -1,6 +1,7 @@
 package com.example.studytracker.service;
 
 import com.example.studytracker.entity.Goal;
+import com.example.studytracker.exception.ResourceNotFoundException;
 import com.example.studytracker.repository.GoalRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,11 @@ public class GoalService {
 
     public GoalService(GoalRepository goalRepository) {
         this.goalRepository = goalRepository;
+    }
+
+    public Goal getGoalOrThrow(Long id) {
+        return goalRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Goal not found: " + id));
     }
 
     // --- Create ---
@@ -49,6 +55,8 @@ public class GoalService {
 
     // --- Delete ---
     public void deleteGoal(Long id) {
+        // delete前に存在確認しておくと、404を返しやすい
+        getGoalOrThrow(id);
         goalRepository.deleteById(id);
     }
 }
