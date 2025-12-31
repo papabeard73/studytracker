@@ -7,9 +7,9 @@
 </head>
 
 <body>
-    <h1>目標を追加</h1>
+    <h1 th:text="${isEdit} ? '目標を編集' : '目標を追加'"></h1>
 
-    <form th:action="@{/goals}" th:object="${goal}" method="post">
+    <form th:action="${isEdit} ? @{/goals/{id}(id=${goal.id})} : @{/goals}" th:object="${goal}" method="post">
         <div>
             <label>タイトル</label><br />
             <input type="text" th:field="*{title}" />

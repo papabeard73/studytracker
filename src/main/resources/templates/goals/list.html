@@ -24,6 +24,13 @@
                 <td th:text="${g.title}"></td>
                 <td th:text="${g.status}"></td>
                 <td th:text="${g.userId}"></td>
+                <td>
+                    <a th:href="@{/goals/{id}/edit(id=${g.id})}">編集</a>
+
+                    <form th:action="@{/goals/{id}/delete(id=${g.id})}" method="post" style="display:inline" onsubmit="return confirm('この目標を削除しますか？（関連データがある場合は注意）');">
+                        <button type="submit">削除</button>
+                    </form>
+                </td>
             </tr>
         </tbody>
     </table>
