@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "goals") // テーブル名を明示
@@ -34,6 +36,10 @@ public class Goal {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt; // 更新日時
+
+    @OneToMany(mappedBy = "goal", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("recordedAt DESC")
+    private List<StudyRecord> studyRecords = new ArrayList<>();
 
     // --- コンストラクタ ---
     public Goal() {
