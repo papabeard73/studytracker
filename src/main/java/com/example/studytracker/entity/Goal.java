@@ -1,6 +1,8 @@
 package com.example.studytracker.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,12 +16,16 @@ public class Goal {
     @Column(name = "user_id", nullable = false)
     private Long userId; // 将来的にUserエンティティと紐づける（外部キー予定）
 
+    @NotBlank(message = "タイトルは必須です")
+    @Size(max = 100, message = "タイトルは100文字以内にしてください")
     @Column(name = "title", nullable = false, length = 100)
     private String title; // 目標タイトル
 
-    @Column(name = "description", length = 500)
+    @Size(max = 150, message = "説明150文字以内にしてください")
+    @Column(name = "description", length = 150)
     private String description; // 詳細説明
 
+    @NotBlank(message = "ステータスは必須です")
     @Column(name = "status", nullable = false)
     private String status; // 状態（Not Started, Active, Completed）
 
@@ -30,7 +36,8 @@ public class Goal {
     private LocalDateTime updatedAt; // 更新日時
 
     // --- コンストラクタ ---
-    public Goal() {}
+    public Goal() {
+    }
 
     public Goal(Long userId, String title, String description, String status) {
         this.userId = userId;
@@ -41,21 +48,61 @@ public class Goal {
     }
 
     // --- ゲッター・セッター ---
-    public Long getId() { return id; }
-    public Long getUserId() { return userId; }
-    public String getTitle() { return title; }
-    public String getDescription() { return description; }
-    public String getStatus() { return status; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public Long getId() {
+        return id;
+    }
 
-    public void setId(Long id) { this.id = id; }
-    public void setUserId(Long userId) { this.userId = userId; }
-    public void setTitle(String title) { this.title = title; }
-    public void setDescription(String description) { this.description = description; }
-    public void setStatus(String status) { this.status = status; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
     // --- 更新用メソッド（便利） ---
     @PreUpdate

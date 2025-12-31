@@ -13,20 +13,24 @@
         <div>
             <label>タイトル</label><br />
             <input type="text" th:field="*{title}" />
+            <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" style="color:red"></div>
         </div>
 
         <div>
             <label>説明</label><br />
             <textarea th:field="*{description}"></textarea>
+            <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color:red"></div>
         </div>
 
         <div>
             <label>ステータス</label><br />
             <select th:field="*{status}">
+                <option value="">-- 選択してください --</option>
                 <option value="Not Started">Not Started</option>
                 <option value="Active">Active</option>
                 <option value="Completed">Completed</option>
             </select>
+            <div th:if="${#fields.hasErrors('status')}" th:errors="*{status}" style="color:red"></div>
         </div>
 
         <div style="margin-top: 12px;">

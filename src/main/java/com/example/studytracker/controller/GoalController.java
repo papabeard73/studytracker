@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 
 @Controller
 public class GoalController {
@@ -37,7 +39,11 @@ public class GoalController {
     }
 
     @PostMapping("/goals")
-    public String create(Goal goal) {
+    public String create(@Valid Goal goal, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("isEdit", false);
+            return "goals/form";
+        }
         // 今はログインなしなので仮のユーザーIDを固定で入れる
         goal.setUserId(1L);
 
@@ -56,7 +62,13 @@ public class GoalController {
     }
 
     @PostMapping("/goals/{id}")
-    public String update(@PathVariable Long id, Goal goal) {
+    public String update(@PathVariable Long id, @Valid Goal goal, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            // 編集時は id が必要なので戻す
+            goal.setId(id);
+            model.addAttribute("isEdit", true);
+            return "goals/form";
+        }
         // 今はログインなしなので固定（将来はログインユーザーから取得）
         goal.setUserId(1L);
 
