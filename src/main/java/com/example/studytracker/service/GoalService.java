@@ -50,7 +50,7 @@ public class GoalService {
                     existing.setUpdatedAt(LocalDateTime.now());
                     return goalRepository.save(existing);
                 })
-                .orElseThrow(() -> new RuntimeException("Goal not found: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Goal not found: " + id));
     }
 
     // --- Delete ---
