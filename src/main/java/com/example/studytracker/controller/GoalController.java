@@ -7,6 +7,7 @@ import com.example.studytracker.entity.StudyRecord;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import jakarta.validation.Valid;
@@ -107,14 +108,19 @@ public class GoalController {
     @PostMapping("/goals/{goalId}/records")
     public String createRecord(
             @PathVariable Long goalId,
-            @Valid StudyRecord record,
+            @Valid @ModelAttribute("record") StudyRecord record,
             BindingResult bindingResult,
             Model model) {
 
         Goal goal = goalService.getGoalOrThrow(goalId);
 
+        // エラー特定のため一時的なログ
+        System.out.println("### hasErrors = " + bindingResult.hasErrors());
+        System.out.println("### errors = " + bindingResult.getAllErrors());
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("goal", goal);
+            model.addAttribute("record", record); // 念のため明示
             return "goals/record_form";
         }
 

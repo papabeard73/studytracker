@@ -1,0 +1,10 @@
+<div th:fragment="formErrors" th:if="${#fields.hasErrors('*')}" style="border: 1px solid red; padding: 10px; margin: 12px 0;">
+
+    <p style="margin: 0 0 8px 0; color: red;">
+        入力内容に誤りがあります。修正してください。
+    </p>
+
+    <ul style="margin: 0; padding-left: 18px; color: red;">
+        <li th:each="e : ${#fields.errors('*')}" th:text="${e}"></li>
+    </ul>
+</div>

@@ -1,5 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="/css/app.css">
 
 <head>
     <meta charset="utf-8" />
@@ -11,32 +12,41 @@
 
     <p>
         <strong>目標：</strong>
-        <span th:text="${goal.title}"></span>
+        <span th:text="${goal != null ? goal.title : ''}"></span>
     </p>
 
-    <form th:action="@{/goals/{goalId}/records(goalId=${goal.id})}" th:object="${record}" method="post">
+    <form th:action="${goal != null} ? @{/goals/{goalId}/records(goalId=${goal.id})} : @{/goals}" th:object="${record}" method="post">
+
+        <!-- 共通エラー枠 -->
+        <div th:replace="~{fragments/form_errors :: formErrors}"></div>
 
         <div>
             <label>日付</label><br />
-            <input type="date" th:field="*{recordedAt}" />
-            <div th:if="${#fields.hasErrors('recordedAt')}" th:errors="*{recordedAt}" style="color:red"></div>
+            <!-- <input type="date" th:field="*{recordedAt}" /> -->
+            <!-- <div th:if="${#fields.hasErrors('recordedAt')}" th:errors="*{recordedAt}" style="color:red"></div> -->
+            <input type="date" th:field="*{recordedAt}" th:errorclass="field-error" />
+            <div th:errors="*{recordedAt}" style="color:red"></div>
         </div>
 
         <div>
             <label>内容</label><br />
-            <input type="text" th:field="*{content}" />
-            <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" style="color:red"></div>
+            <!-- <input type="text" th:field="*{content}" />
+            <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" style="color:red"></div> -->
+            <input type="text" th:field="*{content}" th:errorclass="field-error" />
+            <div th:errors="*{content}" style="color:red"></div>
         </div>
 
         <div>
             <label>学習時間（分）</label><br />
-            <input type="number" th:field="*{durationMinutes}" />
-            <div th:if="${#fields.hasErrors('durationMinutes')}" th:errors="*{durationMinutes}" style="color:red"></div>
+            <!-- <input type="number" th:field="*{durationMinutes}" />
+            <div th:if="${#fields.hasErrors('durationMinutes')}" th:errors="*{durationMinutes}" style="color:red"></div> -->
+            <input type="number" th:field="*{durationMinutes}" th:errorclass="field-error" />
+            <div th:errors="*{durationMinutes}" style="color:red"></div>
         </div>
 
         <div style="margin-top: 12px;">
             <button type="submit">保存</button>
-            <a th:href="@{/goals/{id}(id=${goal.id})}">詳細へ戻る</a>
+            <a th:href="${goal != null} ? @{/goals/{id}(id=${goal.id})} : @{/goals}">詳細へ戻る</a>
         </div>
     </form>
 </body>

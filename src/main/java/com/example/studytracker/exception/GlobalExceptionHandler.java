@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.web.servlet.resource.NoResourceFoundException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
@@ -21,6 +23,13 @@ public class GlobalExceptionHandler {
 
         model.addAttribute("message", ex.getMessage());
         return "error/404";
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public void handleNoResourceFound(NoResourceFoundException ex) {
+        // favicon.ico などの静的リソース未検出は “想定内” として静かにする
+        // 何もしない（ログも出さない）方が運用上見やすい
     }
 
     @ExceptionHandler(Exception.class)
