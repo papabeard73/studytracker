@@ -9,8 +9,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class GoalService {
+    // ログ用
+    private static final Logger log = LoggerFactory.getLogger(GoalService.class);
 
     private final GoalRepository goalRepository;
 
@@ -25,8 +30,10 @@ public class GoalService {
 
     // --- Create ---
     public Goal createGoal(Goal goal) {
-        // goal.setCreatedAt(LocalDateTime.now());
-        // goal.setUpdatedAt(LocalDateTime.now());
+        // ログ
+        log.info("Creating goal: title={}, userId={}",
+                goal.getTitle(), goal.getUserId());
+
         return goalRepository.save(goal);
     }
 
@@ -42,6 +49,9 @@ public class GoalService {
 
     // --- Update ---
     public Goal updateGoal(Long id, Goal updated) {
+        // ログ
+        log.info("Updating goal id={}", id);
+
         return goalRepository.findById(id)
                 .map(existing -> {
                     existing.setTitle(updated.getTitle());
@@ -55,6 +65,9 @@ public class GoalService {
 
     // --- Delete ---
     public void deleteGoal(Long id) {
+        // ログ
+        log.info("Deleting goal id={}", id);
+
         // delete前に存在確認しておくと、404を返しやすい
         getGoalOrThrow(id);
         goalRepository.deleteById(id);

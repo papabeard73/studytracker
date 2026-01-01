@@ -1,4 +1,5 @@
 # 目標・学習管理アプリ（Springboot版）
+ [![CI](https://github.com/papabeard73/studytracker/actions/workflows/ci.yml/badge.svg)](https://github.com/papabeard73/studytracker/actions/workflows/ci.yml)
 ## 1. 要件定義
 ### 1-1. 目的の整理
   - 用途：Discordを使っている同好会向け
@@ -175,3 +176,31 @@ studytracker/
 
 ## 11. ポートフォリオ
 - 認証、DB設計、エラーハンドリング、テスト、CICDが入っているもの
+
+## 12. 後で追加するもの
+- テスト実行コマンド
+```
+./gradlew test
+```
+
+- GitHub Actions のバッジを貼る
+  - [![CI](https://github.com/papabeard73/studytracker/actions/workflows/ci.yml/badge.svg)](https://github.com/papabeard73/studytracker/actions/workflows/ci.yml)
+
+## CI / CD
+
+本プロジェクトでは GitHub Actions を用いて CI を構築しています。
+
+- push / pull request 時に自動実行
+- 実行内容
+  - 単体テスト（Service層中心）
+  - ビルドチェック（Gradle）
+
+これにより、機能追加やリファクタリング時の品質を担保しています。
+
+## Logging
+
+本アプリケーションでは SLF4J + Logback によるログ出力を行っています。
+
+- 業務イベント（作成・更新・削除）を INFO ログとして出力
+- 例外発生時は ControllerAdvice で ERROR ログを出力
+- 本番環境では Render のログ機能で確認可能
