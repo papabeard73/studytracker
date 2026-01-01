@@ -23,7 +23,7 @@ public class Goal {
     @Column(name = "title", nullable = false, length = 100)
     private String title; // 目標タイトル
 
-    @Size(max = 150, message = "説明150文字以内にしてください")
+    @Size(max = 150, message = "説明は150文字以内にしてください")
     @Column(name = "description", length = 150)
     private String description; // 詳細説明
 

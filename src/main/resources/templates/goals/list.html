@@ -21,7 +21,9 @@
         <tbody>
             <tr th:each="g : ${goals}">
                 <td th:text="${g.id}"></td>
-                <td th:text="${g.title}"></td>
+                <td>
+                    <a th:href="@{/goals/{id}(id=${g.id})}" th:text="${g.title}"></a>
+                </td>
                 <td th:text="${g.status}"></td>
                 <td th:text="${g.userId}"></td>
                 <td>

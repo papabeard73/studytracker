@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
@@ -25,7 +26,8 @@ public class StudyRecord {
     private LocalDate recordedAt;
 
     @NotBlank(message = "内容は必須です")
-    @Column(name = "content", nullable = false, length = 200)
+    @Size(max = 100, message = "内容は100文字以内にしてください")
+    @Column(name = "content", nullable = false, length = 100)
     private String content;
 
     @NotNull(message = "学習時間（分）は必須です")
