@@ -26,6 +26,7 @@ class StudyRecordRepositoryTest {
         Goal goal = new Goal();
         goal.setUserId(1L);
         goal.setTitle("T");
+        goal.setTargetDate(LocalDate.of(2026, 1, 13));
         goal.setDescription("D");
         goal.setStatus("Active");
         goal.setCreatedAt(LocalDateTime.now());

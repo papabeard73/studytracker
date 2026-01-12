@@ -10,10 +10,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -73,11 +76,13 @@ class GoalServiceTest {
         Goal existing = new Goal();
         existing.setId(1L);
         existing.setTitle("old");
+        existing.setTargetDate(LocalDate.of(2026, 1, 1));
         existing.setDescription("old desc");
         existing.setStatus("Not Started");
 
         Goal updated = new Goal();
         updated.setTitle("new");
+        updated.setTargetDate(LocalDate.of(2026, 1, 5));
         updated.setDescription("new desc");
         updated.setStatus("Active");
 
