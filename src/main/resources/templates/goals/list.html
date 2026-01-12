@@ -1,45 +1,119 @@
-<!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="utf-8" />
-    <title>Goals</title>
-</head>
+<head th:replace="~{fragments/head :: head}"></head>
 
 <body>
-    <h1>目標一覧</h1>
+    <div class="relative flex size-full min-h-screen flex-col bg-[#fcf8f8] group/design-root overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            <header th:replace="~{fragments/header :: header}"></header>
+            <div class="px-40 flex flex-1 justify-center py-5">
+                <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+                    <div class="flex flex-wrap justify-between gap-3 p-4">
+                        <p class="text-[#1b0e0e] tracking-light text-[32px] font-bold leading-tight min-w-72 font-English">My Goals</p>
+                        <div class="flex flex-1 gap-3 flex-wrap py-3 justify-end font-Japanese">
+                            <a href="/goals/new">
+                                <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#ea2832] text-[#fcf8f8] text-sm font-bold leading-normal tracking-[0.015em]">
+                                    <span class="truncate">新しい目標を登録</span>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
 
-    <div>
-        <a href="/goals/new">新しい目標を追加する</a>
+                    <!-- Not Started -->
+                    <h3 class="text-[#1b0e0e] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-0 pt-5 mt-5 font-English">Not Started</h3>
+                    <p th:if="${#lists.isEmpty(goals.?[status == 'Not Started'])}" class="text-[#994d51] text-sm font-normal leading-normal px-4 py-2 font-Japanese">データはありません</p>
+                    <div th:each="g : ${goals.?[status == 'Not Started']}">
+                        <div class="md:flex items-center gap-4 bg-[#fcf8f8] px-4 min-h-[72px] py-2 justify-between font-Japanese">
+                            <div class="flex items-center gap-4">
+                                <div class="text-[#1b0e0e] flex items-center justify-center rounded-lg bg-[#f3e7e8] shrink-0 size-12" data-icon="Trophy" data-size="24px" data-weight="regular">
+                                    <img src="/images/notStarted.svg" alt="SVGicon" />
+                                </div>
+                                <div class="flex flex-col justify-center">
+                                    <p class="text-[#1b0e0e] text-base font-medium leading-normal line-clamp-1" th:text="${g.title}"></p>
+                                    <p class="text-[#994d51] text-sm font-normal leading-normal line-clamp-2">期限: <span th:text="${g.targetDate}"></span></p>
+                                    <p class="text-[#994d51] text-sm font-normal leading-normal line-clamp-2">ステータス: <span th:text="${g.status}"></span></p>
+                                </div>
+                            </div>
+                            <div class="shrink-0 py-3 ">
+                                <a th:href="@{/goals/{id}(id=${g.id})}">
+                                    <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 px-4 bg-[#E8B8BA] text-[#1b0e0e] text-sm font-medium leading-normal w-fit">
+                                        <span class="truncate">詳細を見る</span>
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Not Started -->
+
+                    <!-- Active Goals -->
+                    <h3 class="text-[#1b0e0e] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-0 pt-5 mt-5 font-English">Active Goals</h3>
+                    <p th:if="${#lists.isEmpty(goals.?[status == 'Active'])}" class="text-[#994d51] text-sm font-normal leading-normal px-4 py-2 font-Japanese">データはありません</p>
+                    <div th:each="g : ${goals.?[status == 'Active']}" class="md:flex items-center gap-4 bg-[#fcf8f8] px-4 min-h-[72px] py-2 justify-between font-Japanese">
+                        <div class="flex items-center gap-4">
+                            <div class="text-[#1b0e0e] flex items-center justify-center rounded-lg bg-[#f3e7e8] shrink-0 size-12" data-icon="Trophy" data-size="24px" data-weight="regular">
+                                <img src="/images/activeGoals.svg" alt="SVGicon" />
+                            </div>
+                            <div class="flex flex-col justify-center">
+                                <p class="text-[#1b0e0e] text-base font-medium leading-normal line-clamp-1" th:text="${g.title}"></p>
+                                <p class="text-[#994d51] text-sm font-normal leading-normal line-clamp-2">期限: <span th:text="${g.targetDate}"></span></p>
+                                <p class="text-[#994d51] text-sm font-normal leading-normal line-clamp-2">ステータス: <span th:text="${g.status}"></span></p>
+                            </div>
+                        </div>
+                        <div class="flex flex-1 gap-3 flex-wrap px-0 py-3 justify-start">
+                            <div class="flex flex-1 gap-3 flex-wrap px-0 py-0 justify-end">
+                                <a th:href="@{/goals/{id}/records/new(id=${g.id})}">
+                                    <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 px-4 bg-[#ea2832] text-[#fcf8f8] text-sm font-medium leading-normal tracking-[0.015em]">
+                                        <span class="truncate">記録を追加</span>
+                                    </button>
+                                </a>
+                                <a th:href="@{/goals/{id}(id=${g.id})}">
+                                    <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 px-4 bg-[#E8B8BA] text-[#1b0e0e] text-sm font-medium leading-normal w-fit">
+                                        <span class="truncate">詳細を見る</span>
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / Active Goals -->
+
+                    <!-- Completed Goals -->
+                    <h3 class="text-[#1b0e0e] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-0 pt-5 mt-5 font-English">Completed Goals</h3>
+                    <p th:if="${#lists.isEmpty(goals.?[status == 'Completed'])}" class="text-[#994d51] text-sm font-normal leading-normal px-4 py-2 font-Japanese">データはありません</p>
+                    <div th:each="g : ${goals.?[status == 'Completed']}" class="md:flex items-center gap-4 bg-[#fcf8f8] px-4 min-h-[72px] py-2 justify-between font-Japanese">
+                        <div class="flex items-center gap-4">
+                            <div class="text-[#1b0e0e] flex items-center justify-center rounded-lg bg-[#f3e7e8] shrink-0 size-12" data-icon="Trophy" data-size="24px" data-weight="regular">
+                                <img src="/images/completedGoals.svg" alt="SVGicon" />
+                            </div>
+                            <div class="flex flex-col justify-center">
+                                <p class="text-[#1b0e0e] text-base font-medium leading-normal line-clamp-1" th:text="${g.title}"></p>
+                                <p class="text-[#994d51] text-sm font-normal leading-normal line-clamp-2">達成日: <span th:text="${g.targetDate}"></span></p>
+                                <p class="text-[#994d51] text-sm font-normal leading-normal line-clamp-2">ステータス: <span th:text="${g.status}"></span></p>
+                            </div>
+                        </div>
+                        <div class="shrink-0 py-3">
+                            <div class="flex flex-1 gap-3 flex-wrap px-0 py-0 justify-end">
+                                <a th:href="@{/goals/{id}(id=${g.id})}">
+                                    <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 px-4 bg-[#E8B8BA] text-[#1b0e0e] text-sm font-medium leading-normal w-fit">
+                                        <span class="truncate">詳細を見る</span>
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- / Completed Goals -->
+                    <div class="flex justify-stretch mt-5 font-Japanese">
+                        <div class="flex flex-1 gap-3 flex-wrap px-4 py-3 justify-start">
+                            <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#FE85AC] text-[#fcf8f8] text-sm font-bold leading-normal tracking-[0.015em]">
+                                <span class="truncate">累計を見る</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer th:replace="~{fragments/footer :: footer}"></footer>
+        </div>
     </div>
-
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>タイトル</th>
-                <th>ステータス</th>
-                <th>ユーザーID</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="g : ${goals}">
-                <td th:text="${g.id}"></td>
-                <td>
-                    <a th:href="@{/goals/{id}(id=${g.id})}" th:text="${g.title}"></a>
-                </td>
-                <td th:text="${g.status}"></td>
-                <td th:text="${g.userId}"></td>
-                <td>
-                    <a th:href="@{/goals/{id}/edit(id=${g.id})}">編集</a>
-
-                    <form th:action="@{/goals/{id}/delete(id=${g.id})}" method="post" style="display:inline" onsubmit="return confirm('この目標を削除しますか？（関連データがある場合は注意）');">
-                        <button type="submit">削除</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
 </body>
 
 </html>

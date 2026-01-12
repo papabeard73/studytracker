@@ -55,6 +55,7 @@ public class GoalService {
         return goalRepository.findById(id)
                 .map(existing -> {
                     existing.setTitle(updated.getTitle());
+                    existing.setTargetDate(updated.getTargetDate());
                     existing.setDescription(updated.getDescription());
                     existing.setStatus(updated.getStatus());
                     existing.setUpdatedAt(LocalDateTime.now());

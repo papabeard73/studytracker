@@ -1,0 +1,47 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="/css/app.css">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Goal New</title>
+</head>
+
+<body>
+    <h1 th:text="${isEdit} ? '目標を編集' : '目標を追加'"></h1>
+
+    <form th:action="${isEdit} ? @{/goals/{id}(id=${goal.id})} : @{/goals}" th:object="${goal}" method="post">
+        <!-- 共通エラー枠 -->
+        <div th:replace="~{fragments/form_errors :: formErrors}"></div>
+
+        <div>
+            <label>タイトル</label><br />
+            <input type="text" th:field="*{title}" th:errorclass="field-error" />
+            <div th:errors="*{title}" style="color:red"></div>
+        </div>
+
+        <div>
+            <label>説明</label><br />
+            <textarea th:field="*{description}" th:errorclass="field-error"></textarea>
+            <div th:errors="*{description}" style="color:red"></div>
+        </div>
+
+        <div>
+            <label>ステータス</label><br />
+            <select th:field="*{status}" th:errorclass="field-error">
+                <option value="">-- 選択してください --</option>
+                <option value="Not Started">Not Started</option>
+                <option value="Active">Active</option>
+                <option value="Completed">Completed</option>
+            </select>
+            <div th:errors="*{status}" style="color:red"></div>
+        </div>
+
+        <div style="margin-top: 12px;">
+            <button type="submit">登録</button>
+            <a href="/goals">一覧へ戻る</a>
+        </div>
+    </form>
+</body>
+
+</html>

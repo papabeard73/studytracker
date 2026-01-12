@@ -1,0 +1,45 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Goals</title>
+</head>
+
+<body>
+    <h1>目標一覧</h1>
+
+    <div>
+        <a href="/goals/new">新しい目標を追加する</a>
+    </div>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>タイトル</th>
+                <th>ステータス</th>
+                <th>ユーザーID</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="g : ${goals}">
+                <td th:text="${g.id}"></td>
+                <td>
+                    <a th:href="@{/goals/{id}(id=${g.id})}" th:text="${g.title}"></a>
+                </td>
+                <td th:text="${g.status}"></td>
+                <td th:text="${g.userId}"></td>
+                <td>
+                    <a th:href="@{/goals/{id}/edit(id=${g.id})}">編集</a>
+
+                    <form th:action="@{/goals/{id}/delete(id=${g.id})}" method="post" style="display:inline" onsubmit="return confirm('この目標を削除しますか？（関連データがある場合は注意）');">
+                        <button type="submit">削除</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>

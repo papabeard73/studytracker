@@ -1,11 +1,14 @@
 package com.example.studytracker.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "goals") // テーブル名を明示
@@ -22,6 +25,11 @@ public class Goal {
     @Size(max = 100, message = "タイトルは100文字以内にしてください")
     @Column(name = "title", nullable = false, length = 100)
     private String title; // 目標タイトル
+
+    @NotNull(message = "達成予定日は必須です")
+    @FutureOrPresent(message = "達成日は今日以降にしてください")
+    @Column(name = "target_date", nullable = false)
+    private LocalDate targetDate;
 
     @Size(max = 150, message = "説明は150文字以内にしてください")
     @Column(name = "description", length = 150)
@@ -45,9 +53,10 @@ public class Goal {
     public Goal() {
     }
 
-    public Goal(Long userId, String title, String description, String status) {
+    public Goal(Long userId, String title, LocalDate targetDate, String description, String status) {
         this.userId = userId;
         this.title = title;
+        this.targetDate = targetDate;
         this.description = description;
         this.status = status;
         // this.createdAt = LocalDateTime.now();
@@ -64,6 +73,10 @@ public class Goal {
 
     public String getTitle() {
         return title;
+    }
+
+    public LocalDate getTargetDate() {
+        return targetDate;
     }
 
     public String getDescription() {
@@ -92,6 +105,10 @@ public class Goal {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setTargetDate(LocalDate targetDate) {
+        this.targetDate = targetDate;
     }
 
     public void setDescription(String description) {

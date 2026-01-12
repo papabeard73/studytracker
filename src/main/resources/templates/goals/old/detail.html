@@ -1,0 +1,56 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Goal Detail</title>
+</head>
+
+<body>
+    <h1>目標詳細</h1>
+
+    <section>
+        <h2 th:text="${goal.title}">タイトル</h2>
+        <p><strong>ステータス：</strong><span th:text="${goal.status}"></span></p>
+        <p><strong>説明：</strong><span th:text="${goal.description}"></span></p>
+
+        <p>
+            <a th:href="@{/goals/{id}/edit(id=${goal.id})}">目標を編集</a>
+            |
+            <a href="/goals">一覧へ戻る</a>
+        </p>
+    </section>
+
+    <hr />
+
+    <section>
+        <h2>学習記録</h2>
+
+        <p>
+            <a th:href="@{/goals/{goalId}/records/new(goalId=${goal.id})}">学習記録を追加</a>
+        </p>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>日付</th>
+                    <th>内容</th>
+                    <th>学習時間(分)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${#lists.isEmpty(records)}">
+                    <td colspan="3">まだ記録がありません</td>
+                </tr>
+
+                <tr th:each="r : ${records}">
+                    <td th:text="${r.recordedAt}"></td>
+                    <td th:text="${r.content}"></td>
+                    <td th:text="${r.durationMinutes}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</body>
+
+</html>

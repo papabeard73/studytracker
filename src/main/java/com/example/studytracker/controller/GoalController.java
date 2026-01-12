@@ -37,6 +37,7 @@ public class GoalController {
     @GetMapping("/goals")
     public String list(Model model) {
         model.addAttribute("goals", goalService.getAllGoals());
+        model.addAttribute("pageTitle", "TOP - 目標一覧");
         return "goals/list";
     }
 
