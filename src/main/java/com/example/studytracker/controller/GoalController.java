@@ -45,6 +45,7 @@ public class GoalController {
     @GetMapping("/goals/new")
     public String newForm(Model model) {
         model.addAttribute("goal", new Goal());
+        model.addAttribute("pageTitle", "目標を追加");
         model.addAttribute("isEdit", false);
         return "goals/form";
     }
