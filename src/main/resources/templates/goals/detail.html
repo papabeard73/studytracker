@@ -1,56 +1,96 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="/css/app.css">
 
-<head>
-    <meta charset="utf-8" />
-    <title>Goal Detail</title>
-</head>
+<head th:replace="~{fragments/head :: head}"></head>
 
 <body>
-    <h1>目標詳細</h1>
+    <div class="relative flex size-full min-h-screen flex-col bg-[#fcf8f8] group/design-root overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            <header th:replace="~{fragments/header :: header}"></header>
 
-    <section>
-        <h2 th:text="${goal.title}">タイトル</h2>
-        <p><strong>ステータス：</strong><span th:text="${goal.status}"></span></p>
-        <p><strong>説明：</strong><span th:text="${goal.description}"></span></p>
+            <div class="px-40 flex flex-1 justify-center py-5 font-Japanese">
 
-        <p>
-            <a th:href="@{/goals/{id}/edit(id=${goal.id})}">目標を編集</a>
-            |
-            <a href="/goals">一覧へ戻る</a>
-        </p>
-    </section>
+                <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+                    <div class="flex flex-wrap justify-between gap-3 p-4">
+                        <div class="flex min-w-72 flex-col gap-1">
+                            <p class="text-[#171212] tracking-light text-[32px] font-bold leading-tight" th:text="${goal.title}">タイトル</p>
+                            <p class="text-[#826869] text-sm font-normal leading-normal" th:text="${goal.targetDate}">期限</p>
+                            <p class="text-[#826869] text-sm font-normal leading-normal" th:text="${goal.status}">ステータス</p>
+                        </div>
+                        <div class="flex flex-1 gap-3 flex-wrap py-3 justify-end font-Japanese">
+                            <a th:href="@{/goals/{id}/edit(id=${goal.id})}">
+                                <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-[#C24F78] text-[#fcf8f8] text-sm font-bold leading-normal tracking-[0.015em]">
+                                    <span class="truncate">目標を編集</span>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
 
-    <hr />
+                    <div class="flex flex-col gap-3 px-4 py-3">
+                        <p class="text-[#171212] text-base font-medium leading-normal">目標の説明</p>
+                        <p class="text-[#826869] text-sm font-normal leading-normal" th:text="${goal.description}"></p>
+                    </div>
 
-    <section>
-        <h2>学習記録</h2>
+                    <h2 class="text-[#171212] text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">学習記録</h2>
 
-        <p>
-            <a th:href="@{/goals/{goalId}/records/new(goalId=${goal.id})}">学習記録を追加</a>
-        </p>
+                    <div class="px-4 py-3 @container">
+                        <div class="flex overflow-x-auto rounded-xl border border-[#e4dddd] bg-white">
+                            <table class="flex-1">
+                                <thead>
+                                    <tr class="bg-white">
+                                        <th class="px-4 py-3 text-left text-[#171212] w-[400px] text-sm font-medium leading-normal">日付</th>
+                                        <th class="px-4 py-3 text-left text-[#171212] w-[400px] text-sm font-medium leading-normal">
+                                            時間（分単位）
+                                        </th>
+                                        <th class="px-4 py-3 text-left text-[#171212] w-[400px] text-sm font-medium leading-normal">
+                                            内容
+                                        </th>
+                                        <th class="px-4 py-3 text-left text-[#171212] w-60 text-[#826869] text-sm font-medium leading-normal">
+                                            操作
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>日付</th>
-                    <th>内容</th>
-                    <th>学習時間(分)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:if="${#lists.isEmpty(records)}">
-                    <td colspan="3">まだ記録がありません</td>
-                </tr>
+                                    <tr th:if="${#lists.isEmpty(records)}">
+                                        <td colspan="4" class="h-[72px] px-4 py-2 text-[#826869] text-sm font-normal leading-normal text-center">
+                                            学習記録はまだありません！
+                                        </td>
+                                    </tr>
 
-                <tr th:each="r : ${records}">
-                    <td th:text="${r.recordedAt}"></td>
-                    <td th:text="${r.content}"></td>
-                    <td th:text="${r.durationMinutes}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
+
+                                    <tr class="border-t border-t-[#e4dddd]" th:each="r : ${records}">
+                                        <td class="h-[72px] px-4 py-2 w-[400px] text-[#826869] text-sm font-normal leading-normal" th:text="${r.recordedAt}"></td>
+                                        <td class="h-[72px] px-4 py-2 w-[400px] text-[#826869] text-sm font-normal leading-normal" th:text="${r.content}"></td>
+                                        <td class="h-[72px] px-4 py-2 w-[400px] text-[#826869] text-sm font-normal leading-normal" th:text="${r.durationMinutes}"></td>
+                                        <!-- 以下未 -->
+                                        <td class="h-[72px] px-4 py-2 w-60 text-sm font-bold leading-normal tracking-[0.015em]">
+                                            <a href="/records/edit?id={{ .ID }}" class="text-[#ea2832]"><button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-6 px-2 bg-[#C24F78] text-[#fcf8f8] text-sm font-medium leading-normal w-fit"><span class="truncate">編集</span></button></a>
+                                            <a href="/records/delete?id={{ .ID }}" class="text-[#ea2832]"><button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-6 mt-1 px-2 bg-[#56423E] text-[#fcf8f8] text-sm font-medium leading-normal w-fit" onclick="if(confirm('本当に削除しますか？')) { window.location.href='/records/delete?id={{ $.Goal.ID }}'; }"><span class="truncate">削除</span></button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 後日追加 -->
+                    <!-- <p class="text-[#826869] text-sm font-normal leading-normal pb-3 pt-1 px-4">合計時間: {{ .TotalDuration }} hours</p> -->
+
+                    <div class="flex px-4 py-3 justify-end">
+                        <a th:href="@{/goals/{goalId}/records/new(goalId=${goal.id})}">
+                            <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 px-4 bg-[#ea2832] text-[#fcf8f8] text-sm font-medium leading-normal tracking-[0.015em]">
+                                <span class="truncate">記録を追加</span>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <footer th:replace="~{fragments/footer :: footer}"></footer>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -70,6 +70,7 @@ public class GoalController {
         Goal goal = goalService.getGoalOrThrow(id);
 
         model.addAttribute("goal", goal);
+        model.addAttribute("pageTitle", "目標を編集");
         model.addAttribute("isEdit", true); // フォームで分岐に使う
         return "goals/form";
     }
@@ -102,6 +103,7 @@ public class GoalController {
     public String detail(@PathVariable Long id, Model model) {
         Goal goal = goalService.getGoalOrThrow(id);
         model.addAttribute("goal", goal);
+        model.addAttribute("pageTitle", "詳細を表示");
         model.addAttribute("records", studyRecordService.getRecordsByGoalId(id));
         return "goals/detail";
     }

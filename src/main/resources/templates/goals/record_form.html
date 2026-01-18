@@ -1,54 +1,82 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <link rel="stylesheet" href="/css/app.css">
 
-<head>
-    <meta charset="utf-8" />
-    <title>Study Record New</title>
-</head>
+<head th:replace="~{fragments/head :: head}"></head>
 
 <body>
-    <h1>学習記録を追加</h1>
+    <div class="relative flex size-full min-h-screen flex-col bg-[#fcf8f8] group/design-root overflow-x-hidden">
+        <div class="layout-container flex h-full grow flex-col">
+            <header th:replace="~{fragments/header :: header}"></header>
+            <div class="px-40 flex flex-1 justify-center py-5">
 
-    <p>
-        <strong>目標：</strong>
-        <span th:text="${goal != null ? goal.title : ''}"></span>
-    </p>
+                <div class="px-40 flex flex-1 justify-center py-5">
+                    <div class="layout-content-container flex flex-col w-[512px] max-w-[512px] py-5 max-w-[960px] flex-1">
 
-    <form th:action="${goal != null} ? @{/goals/{goalId}/records(goalId=${goal.id})} : @{/goals}" th:object="${record}" method="post">
+                        <div class="flex flex-wrap justify-between gap-3 p-4">
+                            <p class="text-[#171212] tracking-light text-[32px] font-bold leading-tight min-w-72 font-English">Add New Study Record</p>
+                        </div>
 
-        <!-- 共通エラー枠 -->
-        <div th:replace="~{fragments/form_errors :: formErrors}"></div>
+                        <div class="flex flex-wrap justify-between gap-3 p-4">
+                            <p class="text-[#171212] tracking-light text-[24px] leading-tight min-w-72 font-Japanese">
+                                <strong>Goal：</strong>
+                                <span th:text="${goal != null ? goal.title : ''}"></span>
+                            </p>
+                        </div>
 
-        <div>
-            <label>日付</label><br />
-            <!-- <input type="date" th:field="*{recordedAt}" /> -->
-            <!-- <div th:if="${#fields.hasErrors('recordedAt')}" th:errors="*{recordedAt}" style="color:red"></div> -->
-            <input type="date" th:field="*{recordedAt}" th:errorclass="field-error" />
-            <div th:errors="*{recordedAt}" style="color:red"></div>
+                        <form th:action="${goal != null} ? @{/goals/{goalId}/records(goalId=${goal.id})} : @{/goals}" th:object="${record}" method="post">
+                            <!-- 共通エラー枠 -->
+                            <div th:replace="~{fragments/form_errors :: formErrors}"></div>
+
+                            <div class="flex max-w-[960px] flex-wrap items-end gap-4 px-4 py-3 font-Japanese">
+                                <label class="flex flex-col min-w-40 flex-1">
+                                    <p class="text-[#171212] text-base font-medium leading-normal pb-2">日付</p>
+                                    <input type="date" th:field="*{recordedAt}" th:errorclass="field-error" placeholder="e.g., 2025-08-31" required class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#171212] focus:outline-0 focus:ring-0 border border-[#e4dddd] bg-white focus:border-[#e4dddd] h-14 placeholder:text-[#826869] p-[15px] text-base font-normal leading-normal" />
+                                </label>
+                                <div th:errors="*{recordedAt}" style="color:red"></div>
+                            </div>
+
+                            <div class="flex max-w-[960px] flex-wrap items-end gap-4 px-4 py-3 font-Japanese">
+                                <label class="flex flex-col min-w-40 flex-1">
+                                    <p class="text-[#171212] text-base font-medium leading-normal pb-2">内容</p>
+                                    <input type="text" th:field="*{content}" th:errorclass="field-error" placeholder="e.g., 練習問題を30問" required class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#171212] focus:outline-0 focus:ring-0 border border-[#e4dddd] bg-white focus:border-[#e4dddd] h-14 placeholder:text-[#826869] p-[15px] text-base font-normal leading-normal" />
+                                </label>
+                                <div th:errors="*{content}" style="color:red"></div>
+                            </div>
+
+                            <div class="flex max-w-[960px] flex-wrap items-end gap-4 px-4 py-3 font-Japanese">
+                                <label class="flex flex-col min-w-40 flex-1">
+                                    <p class="text-[#171212] text-base font-medium leading-normal pb-2">学習時間（分）</p>
+                                    <input type="number" th:field="*{durationMinutes}" th:errorclass="field-error" placeholder="e.g., 60" required class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#171212] focus:outline-0 focus:ring-0 border border-[#e4dddd] bg-white focus:border-[#e4dddd] h-14 placeholder:text-[#826869] p-[15px] text-base font-normal leading-normal" />
+                                </label>
+
+                                <div th:errors="*{durationMinutes}" style="color:red"></div>
+                            </div>
+
+                            <div class="flex px-4 py-3 justify-end">
+
+                                <div class="">
+                                    <a th:href="${goal != null} ? @{/goals/{id}(id=${goal.id})} : @{/goals}">
+                                        <button class="flex min-w-[84px] max-w-[960px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#56423E] text-[#fcf8f8] text-sm font-bold leading-normal tracking-[0.015em]">
+                                            <span class="truncate">詳細へ戻る</span>
+                                        </button>
+                                    </a>
+                                </div>
+
+                                <div class="ml-3">
+                                    <button class="flex min-w-[84px] max-w-[960px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#ea2832] text-[#fcf8f8] text-sm font-bold leading-normal tracking-[0.015em]" type="submit">
+                                        <span class="truncate">保存</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <footer th:replace="~{fragments/footer :: footer}"></footer>
         </div>
-
-        <div>
-            <label>内容</label><br />
-            <!-- <input type="text" th:field="*{content}" />
-            <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" style="color:red"></div> -->
-            <input type="text" th:field="*{content}" th:errorclass="field-error" />
-            <div th:errors="*{content}" style="color:red"></div>
-        </div>
-
-        <div>
-            <label>学習時間（分）</label><br />
-            <!-- <input type="number" th:field="*{durationMinutes}" />
-            <div th:if="${#fields.hasErrors('durationMinutes')}" th:errors="*{durationMinutes}" style="color:red"></div> -->
-            <input type="number" th:field="*{durationMinutes}" th:errorclass="field-error" />
-            <div th:errors="*{durationMinutes}" style="color:red"></div>
-        </div>
-
-        <div style="margin-top: 12px;">
-            <button type="submit">保存</button>
-            <a th:href="${goal != null} ? @{/goals/{id}(id=${goal.id})} : @{/goals}">詳細へ戻る</a>
-        </div>
-    </form>
+    </div>
 </body>
 
 </html>
