@@ -192,4 +192,14 @@ public class GoalController {
         studyRecordService.updateRecord(goal, recordId, record);
         return "redirect:/goals/" + goalId;
     }
+
+    // 学習記録の削除（POST）
+    @PostMapping("/goals/{goalId}/records/{recordId}/delete")
+    public String deleteRecord(
+            @PathVariable Long goalId,
+            @PathVariable Long recordId) {
+        Goal goal = goalService.getGoalOrThrow(goalId);
+        studyRecordService.deleteRecord(goal, recordId);
+        return "redirect:/goals/" + goalId;
+    }
 }

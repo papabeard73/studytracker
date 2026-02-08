@@ -57,4 +57,16 @@ public class StudyRecordService {
         existing.setDurationMinutes(updated.getDurationMinutes());
         return studyRecordRepository.save(existing);
     }
+
+    public void deleteRecord(Goal goal, Long recordId) {
+        log.info("Deleting study record id={}", recordId);
+
+        StudyRecord existing = getRecordOrThrow(recordId);
+        if (!Objects.equals(existing.getGoal().getId(), goal.getId())) {
+            throw new com.example.studytracker.exception.ResourceNotFoundException(
+                    "StudyRecord not found for goal: " + recordId);
+        }
+
+        studyRecordRepository.delete(existing);
+    }
 }
