@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -22,6 +23,7 @@ public class StudyRecord {
     private Goal goal;
 
     @NotNull(message = "日付は必須です")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "recorded_at", nullable = false)
     private LocalDate recordedAt;
 

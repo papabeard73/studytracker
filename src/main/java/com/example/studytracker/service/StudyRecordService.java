@@ -6,6 +6,7 @@ import com.example.studytracker.repository.StudyRecordRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,5 +35,26 @@ public class StudyRecordService {
 
         record.setGoal(goal);
         return studyRecordRepository.save(record);
+    }
+
+    public StudyRecord getRecordOrThrow(Long recordId) {
+        return studyRecordRepository.findById(recordId)
+                .orElseThrow(() -> new com.example.studytracker.exception.ResourceNotFoundException(
+                        "StudyRecord not found: " + recordId));
+    }
+
+    public StudyRecord updateRecord(Goal goal, Long recordId, StudyRecord updated) {
+        log.info("Updating study record id={}", recordId);
+
+        StudyRecord existing = getRecordOrThrow(recordId);
+        if (!Objects.equals(existing.getGoal().getId(), goal.getId())) {
+            throw new com.example.studytracker.exception.ResourceNotFoundException(
+                    "StudyRecord not found for goal: " + recordId);
+        }
+
+        existing.setRecordedAt(updated.getRecordedAt());
+        existing.setContent(updated.getContent());
+        existing.setDurationMinutes(updated.getDurationMinutes());
+        return studyRecordRepository.save(existing);
     }
 }

@@ -4,6 +4,7 @@ import com.example.studytracker.service.GoalService;
 import com.example.studytracker.entity.Goal;
 import com.example.studytracker.service.StudyRecordService;
 import com.example.studytracker.entity.StudyRecord;
+import com.example.studytracker.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -125,6 +126,7 @@ public class GoalController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("goal", goal);
             model.addAttribute("record", record); // 念のため明示
+            model.addAttribute("isEdit", false);
             return "goals/record_form";
         }
 
@@ -146,6 +148,48 @@ public class GoalController {
 
         model.addAttribute("goal", goal);
         model.addAttribute("record", record);
+        model.addAttribute("isEdit", false);
         return "goals/record_form";
+    }
+
+    // 学習記録の編集フォーム（GET）
+    @GetMapping("/goals/{goalId}/records/{recordId}/edit")
+    public String editRecordForm(
+            @PathVariable Long goalId,
+            @PathVariable Long recordId,
+            Model model) {
+        Goal goal = goalService.getGoalOrThrow(goalId);
+        StudyRecord record = studyRecordService.getRecordOrThrow(recordId);
+        if (!record.getGoal().getId().equals(goalId)) {
+            throw new ResourceNotFoundException("StudyRecord not found for goal: " + recordId);
+        }
+
+        model.addAttribute("goal", goal);
+        model.addAttribute("record", record);
+        model.addAttribute("isEdit", true);
+        return "goals/record_form";
+    }
+
+    // 学習記録の更新（POST）
+    @PostMapping("/goals/{goalId}/records/{recordId}")
+    public String updateRecord(
+            @PathVariable Long goalId,
+            @PathVariable Long recordId,
+            @Valid @ModelAttribute("record") StudyRecord record,
+            BindingResult bindingResult,
+            Model model) {
+
+        Goal goal = goalService.getGoalOrThrow(goalId);
+
+        if (bindingResult.hasErrors()) {
+            record.setId(recordId);
+            model.addAttribute("goal", goal);
+            model.addAttribute("record", record);
+            model.addAttribute("isEdit", true);
+            return "goals/record_form";
+        }
+
+        studyRecordService.updateRecord(goal, recordId, record);
+        return "redirect:/goals/" + goalId;
     }
 }

@@ -14,7 +14,7 @@
                     <div class="layout-content-container flex flex-col w-[512px] max-w-[512px] py-5 max-w-[960px] flex-1">
 
                         <div class="flex flex-wrap justify-between gap-3 p-4">
-                            <p class="text-[#171212] tracking-light text-[32px] font-bold leading-tight min-w-72 font-English">Add New Study Record</p>
+                            <p class="text-[#171212] tracking-light text-[32px] font-bold leading-tight min-w-72 font-English" th:text="${isEdit} ? 'Edit Study Record' : 'Add New Study Record'">Add New Study Record</p>
                         </div>
 
                         <div class="flex flex-wrap justify-between gap-3 p-4">
@@ -24,7 +24,7 @@
                             </p>
                         </div>
 
-                        <form th:action="${goal != null} ? @{/goals/{goalId}/records(goalId=${goal.id})} : @{/goals}" th:object="${record}" method="post">
+                        <form th:action="${isEdit} ? @{/goals/{goalId}/records/{recordId}(goalId=${goal.id},recordId=${record.id})} : @{/goals/{goalId}/records(goalId=${goal.id})}" th:object="${record}" method="post">
                             <!-- 共通エラー枠 -->
                             <div th:replace="~{fragments/form_errors :: formErrors}"></div>
 
@@ -65,7 +65,7 @@
 
                                 <div class="ml-3">
                                     <button class="flex min-w-[84px] max-w-[960px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#ea2832] text-[#fcf8f8] text-sm font-bold leading-normal tracking-[0.015em]" type="submit">
-                                        <span class="truncate">保存</span>
+                                        <span class="truncate" th:text="${isEdit} ? '更新' : '保存'">保存</span>
                                     </button>
                                 </div>
                             </div>
