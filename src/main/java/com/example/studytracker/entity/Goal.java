@@ -37,9 +37,10 @@ public class Goal {
     @Column(name = "description", length = 150)
     private String description; // 詳細説明
 
-    @NotBlank(message = "ステータスは必須です")
-    @Column(name = "status", nullable = false)
-    private String status; // 状態（Not Started, Active, Completed）
+    @NotNull(message = "ステータスは必須です")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 30)
+    private GoalStatus status; // 状態（NOT_STARTED, ACTIVE, COMPLETED）
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt; // 登録日時
@@ -55,7 +56,7 @@ public class Goal {
     public Goal() {
     }
 
-    public Goal(Long userId, String title, LocalDate targetDate, String description, String status) {
+    public Goal(Long userId, String title, LocalDate targetDate, String description, GoalStatus status) {
         this.userId = userId;
         this.title = title;
         this.targetDate = targetDate;
@@ -85,7 +86,7 @@ public class Goal {
         return description;
     }
 
-    public String getStatus() {
+    public GoalStatus getStatus() {
         return status;
     }
 
@@ -117,7 +118,7 @@ public class Goal {
         this.description = description;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(GoalStatus status) {
         this.status = status;
     }
 

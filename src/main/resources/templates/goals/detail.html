@@ -16,7 +16,7 @@
                         <div class="flex min-w-72 flex-col gap-1">
                             <p class="text-[#171212] tracking-light text-[32px] font-bold leading-tight" th:text="${goal.title}">タイトル</p>
                             <p class="text-[#826869] text-sm font-normal leading-normal" th:text="${goal.targetDate}">期限</p>
-                            <p class="text-[#826869] text-sm font-normal leading-normal" th:text="${goal.status}">ステータス</p>
+                            <p class="text-[#826869] text-sm font-normal leading-normal" th:text="${goal.status.label}">ステータス</p>
                         </div>
                         <div class="flex flex-1 gap-3 flex-wrap py-3 justify-end font-Japanese">
                             <a th:href="@{/goals/{id}/edit(id=${goal.id})}">

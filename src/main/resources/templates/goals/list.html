@@ -22,8 +22,8 @@
 
                     <!-- Not Started -->
                     <h3 class="text-[#1b0e0e] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-0 pt-5 mt-5 font-English">Not Started</h3>
-                    <p th:if="${#lists.isEmpty(goals.?[status == 'Not Started'])}" class="text-[#994d51] text-sm font-normal leading-normal px-4 py-2 font-Japanese">データはありません</p>
-                    <div th:each="g : ${goals.?[status == 'Not Started']}">
+                    <p th:if="${#lists.isEmpty(goals.?[status.name() == 'NOT_STARTED'])}" class="text-[#994d51] text-sm font-normal leading-normal px-4 py-2 font-Japanese">データはありません</p>
+                    <div th:each="g : ${goals.?[status.name() == 'NOT_STARTED']}">
                         <div class="md:flex items-center gap-4 bg-[#fcf8f8] px-4 min-h-[72px] py-2 justify-between font-Japanese">
                             <div class="flex items-center gap-4">
                                 <div class="text-[#1b0e0e] flex items-center justify-center rounded-lg bg-[#f3e7e8] shrink-0 size-12" data-icon="Trophy" data-size="24px" data-weight="regular">
@@ -32,7 +32,7 @@
                                 <div class="flex flex-col justify-center">
                                     <p class="text-[#1b0e0e] text-base font-medium leading-normal line-clamp-1" th:text="${g.title}"></p>
                                     <p class="text-[#994d51] text-sm font-normal leading-normal line-clamp-2">期限: <span th:text="${g.targetDate}"></span></p>
-                                    <p class="text-[#994d51] text-sm font-normal leading-normal line-clamp-2">ステータス: <span th:text="${g.status}"></span></p>
+                                    <p class="text-[#994d51] text-sm font-normal leading-normal line-clamp-2">ステータス: <span th:text="${g.status.label}"></span></p>
                                 </div>
                             </div>
                             <div class="shrink-0 py-3 ">
@@ -48,8 +48,8 @@
 
                     <!-- Active Goals -->
                     <h3 class="text-[#1b0e0e] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-0 pt-5 mt-5 font-English">Active Goals</h3>
-                    <p th:if="${#lists.isEmpty(goals.?[status == 'Active'])}" class="text-[#994d51] text-sm font-normal leading-normal px-4 py-2 font-Japanese">データはありません</p>
-                    <div th:each="g : ${goals.?[status == 'Active']}" class="md:flex items-center gap-4 bg-[#fcf8f8] px-4 min-h-[72px] py-2 justify-between font-Japanese">
+                    <p th:if="${#lists.isEmpty(goals.?[status.name() == 'ACTIVE'])}" class="text-[#994d51] text-sm font-normal leading-normal px-4 py-2 font-Japanese">データはありません</p>
+                    <div th:each="g : ${goals.?[status.name() == 'ACTIVE']}" class="md:flex items-center gap-4 bg-[#fcf8f8] px-4 min-h-[72px] py-2 justify-between font-Japanese">
                         <div class="flex items-center gap-4">
                             <div class="text-[#1b0e0e] flex items-center justify-center rounded-lg bg-[#f3e7e8] shrink-0 size-12" data-icon="Trophy" data-size="24px" data-weight="regular">
                                 <img src="/images/activeGoals.svg" alt="SVGicon" />
@@ -57,7 +57,7 @@
                             <div class="flex flex-col justify-center">
                                 <p class="text-[#1b0e0e] text-base font-medium leading-normal line-clamp-1" th:text="${g.title}"></p>
                                 <p class="text-[#994d51] text-sm font-normal leading-normal line-clamp-2">期限: <span th:text="${g.targetDate}"></span></p>
-                                <p class="text-[#994d51] text-sm font-normal leading-normal line-clamp-2">ステータス: <span th:text="${g.status}"></span></p>
+                                <p class="text-[#994d51] text-sm font-normal leading-normal line-clamp-2">ステータス: <span th:text="${g.status.label}"></span></p>
                             </div>
                         </div>
                         <div class="flex flex-1 gap-3 flex-wrap px-0 py-3 justify-start">
@@ -79,8 +79,8 @@
 
                     <!-- Completed Goals -->
                     <h3 class="text-[#1b0e0e] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-0 pt-5 mt-5 font-English">Completed Goals</h3>
-                    <p th:if="${#lists.isEmpty(goals.?[status == 'Completed'])}" class="text-[#994d51] text-sm font-normal leading-normal px-4 py-2 font-Japanese">データはありません</p>
-                    <div th:each="g : ${goals.?[status == 'Completed']}" class="md:flex items-center gap-4 bg-[#fcf8f8] px-4 min-h-[72px] py-2 justify-between font-Japanese">
+                    <p th:if="${#lists.isEmpty(goals.?[status.name() == 'COMPLETED'])}" class="text-[#994d51] text-sm font-normal leading-normal px-4 py-2 font-Japanese">データはありません</p>
+                    <div th:each="g : ${goals.?[status.name() == 'COMPLETED']}" class="md:flex items-center gap-4 bg-[#fcf8f8] px-4 min-h-[72px] py-2 justify-between font-Japanese">
                         <div class="flex items-center gap-4">
                             <div class="text-[#1b0e0e] flex items-center justify-center rounded-lg bg-[#f3e7e8] shrink-0 size-12" data-icon="Trophy" data-size="24px" data-weight="regular">
                                 <img src="/images/completedGoals.svg" alt="SVGicon" />
@@ -88,7 +88,7 @@
                             <div class="flex flex-col justify-center">
                                 <p class="text-[#1b0e0e] text-base font-medium leading-normal line-clamp-1" th:text="${g.title}"></p>
                                 <p class="text-[#994d51] text-sm font-normal leading-normal line-clamp-2">達成日: <span th:text="${g.targetDate}"></span></p>
-                                <p class="text-[#994d51] text-sm font-normal leading-normal line-clamp-2">ステータス: <span th:text="${g.status}"></span></p>
+                                <p class="text-[#994d51] text-sm font-normal leading-normal line-clamp-2">ステータス: <span th:text="${g.status.label}"></span></p>
                             </div>
                         </div>
                         <div class="shrink-0 py-3">

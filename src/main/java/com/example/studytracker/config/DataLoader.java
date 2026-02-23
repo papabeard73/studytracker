@@ -1,6 +1,7 @@
 package com.example.studytracker.config;
 
 import com.example.studytracker.entity.Goal;
+import com.example.studytracker.entity.GoalStatus;
 import com.example.studytracker.entity.StudyRecord;
 import com.example.studytracker.repository.GoalRepository;
 import com.example.studytracker.repository.StudyRecordRepository;
@@ -31,13 +32,13 @@ public class DataLoader implements CommandLineRunner {
         }
 
         Goal goal1 = goalRepository.save(
-                new Goal(1L, "Spring Boot CRUD", LocalDate.now().plusDays(30), "Goal CRUDを完成させる", "Active"));
+                new Goal(1L, "Spring Boot CRUD", LocalDate.now().plusDays(30), "Goal CRUDを完成させる", GoalStatus.ACTIVE));
 
         Goal goal2 = goalRepository.save(
-                new Goal(1L, "英語学習", LocalDate.now().plusDays(60), "英検1級に向けて単語とリスニング", "Not Started"));
+                new Goal(1L, "英語学習", LocalDate.now().plusDays(60), "英検1級に向けて単語とリスニング", GoalStatus.NOT_STARTED));
 
         Goal goal3 = goalRepository.save(
-                new Goal(1L, "Go言語学習", LocalDate.now().plusDays(40), "コードリーディング", "Active"));
+                new Goal(1L, "Go言語学習", LocalDate.now().plusDays(40), "コードリーディング", GoalStatus.ACTIVE));
 
         studyRecordRepository.save(new StudyRecord(goal1, LocalDate.now().minusDays(2), "Entity設計", 90));
         studyRecordRepository.save(new StudyRecord(goal1, LocalDate.now().minusDays(1), "Controller実装", 120));
