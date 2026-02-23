@@ -1,6 +1,7 @@
 package com.example.studytracker.repository;
 
 import com.example.studytracker.entity.Goal;
+import com.example.studytracker.entity.GoalStatus;
 import com.example.studytracker.entity.StudyRecord;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ class StudyRecordRepositoryTest {
         goal.setTitle("T");
         goal.setTargetDate(LocalDate.of(2099, 1, 13));
         goal.setDescription("D");
-        goal.setStatus("Active");
+        goal.setStatus(GoalStatus.ACTIVE);
         goal.setCreatedAt(LocalDateTime.now());
         goal = goalRepository.save(goal);
 

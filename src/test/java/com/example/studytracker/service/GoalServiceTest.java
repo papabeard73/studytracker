@@ -1,6 +1,7 @@
 package com.example.studytracker.service;
 
 import com.example.studytracker.entity.Goal;
+import com.example.studytracker.entity.GoalStatus;
 import com.example.studytracker.exception.ResourceNotFoundException;
 import com.example.studytracker.repository.GoalRepository;
 import org.junit.jupiter.api.Test;
@@ -78,13 +79,13 @@ class GoalServiceTest {
         existing.setTitle("old");
         existing.setTargetDate(LocalDate.of(2026, 1, 1));
         existing.setDescription("old desc");
-        existing.setStatus("Not Started");
+        existing.setStatus(GoalStatus.NOT_STARTED);
 
         Goal updated = new Goal();
         updated.setTitle("new");
         updated.setTargetDate(LocalDate.of(2026, 1, 5));
         updated.setDescription("new desc");
-        updated.setStatus("Active");
+        updated.setStatus(GoalStatus.ACTIVE);
 
         when(goalRepository.findById(1L)).thenReturn(Optional.of(existing));
         when(goalRepository.save(any(Goal.class))).thenAnswer(inv -> inv.getArgument(0));
@@ -93,7 +94,7 @@ class GoalServiceTest {
 
         assertEquals("new", result.getTitle());
         assertEquals("new desc", result.getDescription());
-        assertEquals("Active", result.getStatus());
+        assertEquals(GoalStatus.ACTIVE, result.getStatus());
 
         // saveされた中身も確認（必要なら）
         ArgumentCaptor<Goal> captor = ArgumentCaptor.forClass(Goal.class);
