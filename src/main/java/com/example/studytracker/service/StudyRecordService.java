@@ -4,6 +4,7 @@ import com.example.studytracker.entity.Goal;
 import com.example.studytracker.entity.StudyRecord;
 import com.example.studytracker.repository.StudyRecordRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
+@Transactional(readOnly = true)
 public class StudyRecordService {
     // ログ用
     private static final Logger log = LoggerFactory.getLogger(StudyRecordService.class);
@@ -26,6 +28,7 @@ public class StudyRecordService {
         return studyRecordRepository.findByGoalIdOrderByRecordedAtDesc(goalId);
     }
 
+    @Transactional
     public StudyRecord addRecord(Goal goal, StudyRecord record) {
         // ログ
         log.info("Adding study record: goalId={}, date={}, minutes={}",
@@ -43,6 +46,7 @@ public class StudyRecordService {
                         "StudyRecord not found: " + recordId));
     }
 
+    @Transactional
     public StudyRecord updateRecord(Goal goal, Long recordId, StudyRecord updated) {
         log.info("Updating study record id={}", recordId);
 
@@ -58,6 +62,7 @@ public class StudyRecordService {
         return studyRecordRepository.save(existing);
     }
 
+    @Transactional
     public void deleteRecord(Goal goal, Long recordId) {
         log.info("Deleting study record id={}", recordId);
 

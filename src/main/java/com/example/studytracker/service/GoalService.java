@@ -4,6 +4,7 @@ import com.example.studytracker.entity.Goal;
 import com.example.studytracker.exception.ResourceNotFoundException;
 import com.example.studytracker.repository.GoalRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
+@Transactional(readOnly = true)
 public class GoalService {
     // ログ用
     private static final Logger log = LoggerFactory.getLogger(GoalService.class);
@@ -29,6 +31,7 @@ public class GoalService {
     }
 
     // --- Create ---
+    @Transactional
     public Goal createGoal(Goal goal) {
         // ログ
         log.info("Creating goal: title={}, userId={}",
@@ -48,6 +51,7 @@ public class GoalService {
     }
 
     // --- Update ---
+    @Transactional
     public Goal updateGoal(Long id, Goal updated) {
         // ログ
         log.info("Updating goal id={}", id);
@@ -65,6 +69,7 @@ public class GoalService {
     }
 
     // --- Delete ---
+    @Transactional
     public void deleteGoal(Long id) {
         // ログ
         log.info("Deleting goal id={}", id);
