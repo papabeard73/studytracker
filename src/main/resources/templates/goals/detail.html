@@ -63,7 +63,6 @@
                                         <td class="h-[72px] px-4 py-2 w-[400px] text-[#826869] text-sm font-normal leading-normal" th:text="${r.recordedAt}"></td>
                                         <td class="h-[72px] px-4 py-2 w-[400px] text-[#826869] text-sm font-normal leading-normal" th:text="${r.content}"></td>
                                         <td class="h-[72px] px-4 py-2 w-[400px] text-[#826869] text-sm font-normal leading-normal" th:text="${r.durationMinutes}"></td>
-                                        <!-- 以下未 -->
                                         <td class="h-[72px] px-4 py-2 w-60 text-sm font-bold leading-normal tracking-[0.015em]">
                                             <a th:href="@{/goals/{goalId}/records/{recordId}/edit(goalId=${goal.id},recordId=${r.id})}" class="text-[#ea2832]"><button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-6 px-2 bg-[#C24F78] text-[#fcf8f8] text-sm font-medium leading-normal w-fit"><span class="truncate">編集</span></button></a>
                                             <form th:action="@{/goals/{goalId}/records/{recordId}/delete(goalId=${goal.id},recordId=${r.id})}" method="post" onsubmit="return confirm('本当に削除しますか？');">
@@ -77,8 +76,10 @@
                         </div>
                     </div>
 
-                    <!-- 後日追加 -->
-                    <!-- <p class="text-[#826869] text-sm font-normal leading-normal pb-3 pt-1 px-4">合計時間: {{ .TotalDuration }} hours</p> -->
+                    <p class="text-[#171212] text-sm font-semibold leading-normal pb-3 pt-1 px-4"
+                       th:text="'合計学習時間: ' + ${totalHours} + '時間 ' + ${remainingMinutes} + '分'">
+                        合計学習時間: 0時間 0分
+                    </p>
 
                     <div class="flex px-4 py-3 justify-end">
                         <a th:href="@{/goals/{goalId}/records/new(goalId=${goal.id})}">

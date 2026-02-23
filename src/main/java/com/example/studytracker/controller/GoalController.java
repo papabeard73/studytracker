@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 public class GoalController {
@@ -103,9 +104,20 @@ public class GoalController {
     @GetMapping("/goals/{id}")
     public String detail(@PathVariable Long id, Model model) {
         Goal goal = goalService.getGoalOrThrow(id);
+        List<StudyRecord> records = studyRecordService.getRecordsByGoalId(id);
+        int totalDurationMinutes = records.stream()
+                .map(StudyRecord::getDurationMinutes)
+                .filter(java.util.Objects::nonNull)
+                .mapToInt(Integer::intValue)
+                .sum();
+        int totalHours = totalDurationMinutes / 60;
+        int remainingMinutes = totalDurationMinutes % 60;
+
         model.addAttribute("goal", goal);
         model.addAttribute("pageTitle", "詳細を表示");
-        model.addAttribute("records", studyRecordService.getRecordsByGoalId(id));
+        model.addAttribute("records", records);
+        model.addAttribute("totalHours", totalHours);
+        model.addAttribute("remainingMinutes", remainingMinutes);
         return "goals/detail";
     }
 
@@ -120,8 +132,8 @@ public class GoalController {
         Goal goal = goalService.getGoalOrThrow(goalId);
 
         // エラー特定のため一時的なログ
-        System.out.println("### hasErrors = " + bindingResult.hasErrors());
-        System.out.println("### errors = " + bindingResult.getAllErrors());
+        // System.out.println("### hasErrors = " + bindingResult.hasErrors());
+        // System.out.println("### errors = " + bindingResult.getAllErrors());
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("goal", goal);

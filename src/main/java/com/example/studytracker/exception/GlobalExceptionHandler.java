@@ -1,7 +1,10 @@
 package com.example.studytracker.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -14,6 +17,11 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private final boolean showErrorDetail;
+
+    public GlobalExceptionHandler(@Value("${app.error.show-detail:false}") boolean showErrorDetail) {
+        this.showErrorDetail = showErrorDetail;
+    }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -27,9 +35,21 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoResourceFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void handleNoResourceFound(NoResourceFoundException ex) {
-        // favicon.ico などの静的リソース未検出は “想定内” として静かにする
-        // 何もしない（ログも出さない）方が運用上見やすい
+    public String handleNoResourceFound(NoResourceFoundException ex, Model model) {
+        log.warn("No resource found: {}", ex.getResourcePath());
+        model.addAttribute("message", "指定されたページは見つかりませんでした");
+        return "error/404";
+    }
+
+    @ExceptionHandler({ BindException.class, ConstraintViolationException.class, IllegalArgumentException.class })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleBadRequest(Exception ex, Model model) {
+        log.warn("Bad request", ex);
+        model.addAttribute("message", "入力内容に誤りがあります。内容を確認してください。");
+        if (showErrorDetail) {
+            model.addAttribute("detail", ex.getMessage());
+        }
+        return "error/400";
     }
 
     @ExceptionHandler(Exception.class)
@@ -39,8 +59,9 @@ public class GlobalExceptionHandler {
         log.error("Unexpected error occurred", ex);
 
         model.addAttribute("message", "予期しないエラーが発生しました");
-        // 開発中は ex.getMessage() を出してもOK（本番は控える）
-        model.addAttribute("detail", ex.getMessage());
+        if (showErrorDetail) {
+            model.addAttribute("detail", ex.getMessage());
+        }
         return "error/500";
     }
 }

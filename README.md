@@ -1,5 +1,33 @@
 # 目標・学習管理アプリ（Springboot版）
  [![CI](https://github.com/papabeard73/studytracker/actions/workflows/ci.yml/badge.svg)](https://github.com/papabeard73/studytracker/actions/workflows/ci.yml)
+
+## 実行方法（Profiles）
+
+- デフォルトプロファイルは `dev`（`application.yml` で `spring.profiles.default: dev`）
+- `DataLoader` は `@Profile("dev")` のため、初期データ投入は開発環境のみ実行されます
+
+### 開発環境（dev）
+
+```bash
+./gradlew bootRun
+```
+
+- DB: H2（in-memory）
+- H2 Console: `http://localhost:8080/h2-console`
+
+### 本番相当（prod）
+
+```bash
+SPRING_PROFILES_ACTIVE=prod \
+DB_URL=jdbc:postgresql://<host>:5432/<db> \
+DB_USERNAME=<username> \
+DB_PASSWORD=<password> \
+./gradlew bootRun
+```
+
+- DB: PostgreSQL
+- JPA: `ddl-auto=validate`
+
 ## 1. 要件定義
 ### 1-1. 目的の整理
   - 用途：Discordを使っている同好会向け
@@ -159,7 +187,22 @@ studytracker/
   - RenderのJava環境で以下のように設定する：
     - Build Command：./gradlew build
     - Start Command：java -jar build/libs/studytracker-0.0.1-SNAPSHOT.jar
-    - Environment Variables：DATABASE_URL, SPRING_PROFILES_ACTIVE=prod などを設定
+    - Environment Variables：
+      - `SPRING_PROFILES_ACTIVE=prod`
+      - `DB_URL=jdbc:postgresql://...`
+      - `DB_USERNAME=...`
+      - `DB_PASSWORD=...`
+
+## デプロイチェックリスト
+
+- [ ] `SPRING_PROFILES_ACTIVE=prod` で起動している（`dev` のままではない）
+- [ ] 本番DB接続情報（`DB_URL`, `DB_USERNAME`, `DB_PASSWORD`）が設定済み
+- [ ] `DataLoader` が本番で実行されないことを確認（`@Profile("dev")`）
+- [ ] `./gradlew test` が成功している
+- [ ] `./gradlew build` が成功し、Jarが生成されている
+- [ ] 本番で `ddl-auto=validate` で起動確認できている
+- [ ] 主要画面（一覧、詳細、追加、編集、削除）を手動確認済み
+- [ ] エラーページ（404/500）とログ出力を確認済み
 
 ## 9. 開発ステップ（予定）
 1. 最小構成で起動確認（Hello Spring Boot!）
@@ -204,3 +247,13 @@ studytracker/
 - 業務イベント（作成・更新・削除）を INFO ログとして出力
 - 例外発生時は ControllerAdvice で ERROR ログを出力
 - 本番環境では Render のログ機能で確認可能
+
+## エラーハンドリング方針（400/404/500）
+
+- 400 Bad Request:
+  - 入力値不正（`BindException` / `ConstraintViolationException` / `IllegalArgumentException`）は `error/400` を返す
+- 404 Not Found:
+  - 業務データ未検出（`ResourceNotFoundException`）とURL未検出（`NoResourceFoundException`）を `error/404` に統一
+- 500 Internal Server Error:
+  - 想定外例外は `error/500` を返す
+  - エラー詳細（`ex.getMessage()`）は `app.error.show-detail` で制御（`dev: true`, `prod: false`）
