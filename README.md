@@ -1,6 +1,32 @@
 # 目標・学習管理アプリ（Springboot版）
  [![CI](https://github.com/papabeard73/studytracker/actions/workflows/ci.yml/badge.svg)](https://github.com/papabeard73/studytracker/actions/workflows/ci.yml)
 
+## セットアップ手順（最低限）
+
+1. 前提条件
+   - Java 21
+   - Git
+   - （本番相当で確認する場合）PostgreSQL
+2. リポジトリを取得
+   - `git clone <this-repo>`
+   - `cd studytracker`
+3. テスト実行
+   - `./gradlew test`
+4. 開発起動（`dev`）
+   - `./gradlew bootRun`
+5. 本番相当起動（`prod`）
+   - `SPRING_PROFILES_ACTIVE=prod DB_URL=... DB_USERNAME=... DB_PASSWORD=... ./gradlew bootRun`
+
+## 環境変数一覧
+
+| 変数名 | 必須 | 用途 | 例 |
+| --- | --- | --- | --- |
+| `SPRING_PROFILES_ACTIVE` | prod時のみ必須 | 実行プロファイル切替 | `prod` |
+| `DB_URL` | prod時のみ必須 | PostgreSQL接続URL | `jdbc:postgresql://host:5432/db` |
+| `DB_USERNAME` | prod時のみ必須 | DBユーザー名 | `studytracker_user` |
+| `DB_PASSWORD` | prod時のみ必須 | DBパスワード | `********` |
+| `APP_ERROR_SHOW_DETAIL` | 任意 | エラー詳細表示切替（通常は設定不要） | `false` |
+
 ## 実行方法（Profiles）
 
 - デフォルトプロファイルは `dev`（`application.yml` で `spring.profiles.default: dev`）
@@ -27,6 +53,7 @@ DB_PASSWORD=<password> \
 
 - DB: PostgreSQL
 - JPA: `ddl-auto=validate`
+- Flyway: 起動時に `src/main/resources/db/migration` の未適用SQLを自動実行
 
 ## 1. 要件定義
 ### 1-1. 目的の整理
@@ -185,13 +212,19 @@ studytracker/
 ## 8. Renderへのデプロイについて
 - Render（Spring Boot、無料枠）
   - RenderのJava環境で以下のように設定する：
-    - Build Command：./gradlew build
+    - Build Command：`./gradlew build`
     - Start Command：java -jar build/libs/studytracker-0.0.1-SNAPSHOT.jar
     - Environment Variables：
       - `SPRING_PROFILES_ACTIVE=prod`
       - `DB_URL=jdbc:postgresql://...`
       - `DB_USERNAME=...`
       - `DB_PASSWORD=...`
+  - デプロイ時の流れ
+    - `./gradlew build` でJarを作成
+    - アプリ起動時にFlywayが `db/migration` を自動適用
+    - その後、アプリ本体が起動（`ddl-auto=validate`）
+  - 既存DBへ初回導入する場合
+    - 既存スキーマと `V1__init.sql` の差分を確認してから適用（必要に応じてbaseline戦略を採用）
 
 ## デプロイチェックリスト
 
