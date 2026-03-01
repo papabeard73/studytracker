@@ -1,12 +1,10 @@
 services:
   - type: web
     name: studytracker-web
-    env: java
+    runtime: docker
     plan: free
     branch: main
     autoDeploy: true
-    buildCommand: ./gradlew build
-    startCommand: java -Dserver.port=$PORT -jar build/libs/studytracker-0.0.1-SNAPSHOT.jar
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
