@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: studytracker-web
+    env: java
+    plan: free
+    branch: main
+    autoDeploy: true
+    buildCommand: ./gradlew build
+    startCommand: java -Dserver.port=$PORT -jar build/libs/studytracker-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DB_HOST
+        fromDatabase:
+          name: studytracker-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: studytracker-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: studytracker-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: studytracker-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: studytracker-db
+          property: password
+      - key: DB_URL
+        value: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+
+databases:
+  - name: studytracker-db
+    plan: free
