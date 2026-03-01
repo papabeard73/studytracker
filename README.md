@@ -200,19 +200,22 @@ studytracker/
 ```
 
 ## 8. Renderへのデプロイについて
-- Render（Spring Boot、無料枠）
-  - RenderのJava環境で以下のように設定する：
-    - Build Command：`./gradlew build`
-    - Start Command：java -jar build/libs/studytracker-0.0.1-SNAPSHOT.jar
-    - Environment Variables：
-      - `SPRING_PROFILES_ACTIVE=prod`
-      - `DB_URL=jdbc:postgresql://...`
-      - `DB_USERNAME=...`
-      - `DB_PASSWORD=...`
-  - デプロイ時の流れ
-    - `./gradlew build` でJarを作成
-    - アプリ起動時にFlywayが `db/migration` を自動適用
-    - その後、アプリ本体が起動（`ddl-auto=validate`）
+- Render Blueprint（`render.yaml`）でデプロイ
+  - 本リポジトリには以下を配置済み
+    - `render.yaml`：Web Service（Docker） + PostgreSQL の定義
+    - `Dockerfile`：Java 21 で `bootJar` を作成して実行する定義
+  - デプロイ手順
+    1. 変更をGitHubへpush
+    2. Renderダッシュボードで Blueprint を作成（または Sync）
+    3. `render.yaml` に従って `studytracker-web` と `studytracker-db` を作成
+  - 環境変数（`render.yaml` で設定）
+    - `SPRING_PROFILES_ACTIVE=prod`
+    - `DB_USERNAME`, `DB_PASSWORD`（PostgreSQLから自動注入）
+    - `DB_URL=jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}`
+  - 起動時の流れ
+    - Docker build 時に `./gradlew clean bootJar` を実行
+    - コンテナ起動時に `PORT` を使って Spring Boot を起動
+    - Flyway が `db/migration` を自動適用後、アプリが起動（`ddl-auto=validate`）
   - 既存DBへ初回導入する場合
     - 既存スキーマと `V1__init.sql` の差分を確認してから適用（必要に応じてbaseline戦略を採用）
 
@@ -222,7 +225,7 @@ studytracker/
 - [ ] 本番DB接続情報（`DB_URL`, `DB_USERNAME`, `DB_PASSWORD`）が設定済み
 - [ ] `DataLoader` が本番で実行されないことを確認（`@Profile("dev")`）
 - [ ] `./gradlew test` が成功している
-- [ ] `./gradlew build` が成功し、Jarが生成されている
+- [ ] RenderのBlueprintデプロイが成功し、`studytracker-web` / `studytracker-db` が起動している
 - [ ] 本番で `ddl-auto=validate` で起動確認できている
 - [ ] 主要画面（一覧、詳細、追加、編集、削除）を手動確認済み
 - [ ] エラーページ（404/500）とログ出力を確認済み
