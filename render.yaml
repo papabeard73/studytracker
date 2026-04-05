@@ -33,4 +33,4 @@ services:
 
 databases:
   - name: studytracker-db
-    plan: free
+    plan: basic-256mb

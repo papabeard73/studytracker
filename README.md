@@ -204,6 +204,9 @@ studytracker/
   - 本リポジトリには以下を配置済み
     - `render.yaml`：Web Service（Docker） + PostgreSQL の定義
     - `Dockerfile`：Java 21 で `bootJar` を作成して実行する定義
+  - 最安構成
+    - Web Service：`free`
+    - PostgreSQL：`basic-256mb`（有料、月 `$6`）
   - デプロイ手順
     1. 変更をGitHubへpush
     2. Renderダッシュボードで Blueprint を作成（または Sync）
